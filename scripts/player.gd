@@ -86,10 +86,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			
 		if result and result.collider.is_class("CharacterBody3D"):
 			var hit_player: CharacterBody3D = result.collider
-			var is_headshot = false
+			var is_headshot: bool = false
 			
-			# Check if we hit the head collision shape
-			if result.shape.get_parent().name == "Head":
+			# Check if hit point is in head area (roughly head height)
+			var hit_height: float = result.position.y - hit_player.global_position.y
+			if hit_height > 1.4 and hit_height < 1.9:  # Head height range
 				is_headshot = true
 			
 			hit_player.recieve_damage.rpc_id(
