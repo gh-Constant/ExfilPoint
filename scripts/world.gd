@@ -5,6 +5,7 @@ extends Node
 @onready var pause_menu: PanelContainer = $Menu/PauseMenu
 @onready var address_entry: LineEdit = %AddressEntry
 @onready var menu_music: AudioStreamPlayer = %MenuMusic
+@onready var username_input: LineEdit = %UsernameInput
 
 const Player = preload("res://player.tscn")
 const PORT = 9999
@@ -51,6 +52,13 @@ func _on_back_pressed() -> void:
 		if !controller:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		options = false
+
+func _ready() -> void:
+	username_input.text = Global.username
+	username_input.text_changed.connect(_on_username_changed)
+
+func _on_username_changed(new_text: String) -> void:
+	Global.username = new_text if new_text.length() > 0 else "Player"
 
 #func _ready() -> void:
 func _on_host_button_pressed() -> void:

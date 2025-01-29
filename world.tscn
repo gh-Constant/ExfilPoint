@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://b57uspbprxc8"]
+[gd_scene load_steps=24 format=3 uid="uid://b57uspbprxc8"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_ho7yh"]
 [ext_resource type="PackedScene" uid="uid://bd3ai1v40ssao" path="res://map.tscn" id="3_fd0sg"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://scripts/ui/menu/pause/resume.gd" id="7_5cdyw"]
 [ext_resource type="Script" path="res://scripts/ui/menu/options/controller_sensitivity.gd" id="7_jhf7u"]
 [ext_resource type="Script" path="res://scripts/ui/menu/pause/quit.gd" id="9_ucmny"]
+[ext_resource type="Script" path="res://scripts/ui/killfeed.gd" id="killfeed_script"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_r06yd"]
 energy_multiplier = 1.25
@@ -324,6 +325,19 @@ layout_mode = 2
 text = "Quit"
 script = ExtResource("9_ucmny")
 
+[node name="UsernameContainer" type="HBoxContainer" parent="Menu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="UsernameLabel" type="Label" parent="Menu/MainMenu/MarginContainer/VBoxContainer/UsernameContainer"]
+layout_mode = 2
+text = "Username:"
+
+[node name="UsernameInput" type="LineEdit" parent="Menu/MainMenu/MarginContainer/VBoxContainer/UsernameContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter username..."
+
 [node name="MusicToggle" type="CheckButton" parent="Menu/MainMenu"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -335,6 +349,28 @@ text = "Music"
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
 spawn_path = NodePath("..")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Killfeed" type="VBoxContainer" parent="UI"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 10.0
+offset_right = -10.0
+grow_horizontal = 0
+theme_override_constants/separation = 4
+script = ExtResource("killfeed_script")
 
 [connection signal="toggled" from="Menu/Options/MarginContainer/VBoxContainer/FpsCounter" to="FpsCounter" method="_on_fps_counter_toggled"]
 [connection signal="toggled" from="Menu/Options/MarginContainer/VBoxContainer/Ping" to="FpsCounter" method="_on_ping_toggled"]

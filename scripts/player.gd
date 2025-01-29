@@ -5,6 +5,8 @@ extends CharacterBody3D
 @onready var muzzle_flash: GPUParticles3D = $Camera3D/pistol/GPUParticles3D
 @onready var raycast: RayCast3D = $Camera3D/RayCast3D
 @onready var gunshot_sound: AudioStreamPlayer3D = %GunshotSound
+@onready var username_label: Label3D = $Username
+@onready var killfeed: VBoxContainer = get_node("/root/World/UI/Killfeed")
 
 ## Number of shots before a player dies
 @export var health : int = 2
@@ -24,8 +26,11 @@ var controller_sensitivity : float =  .010
 var axis_vector : Vector2
 var	mouse_captured : bool = true
 
-const SPEED = 5.5
-const JUMP_VELOCITY = 4.5
+const SPEED = 6.5
+const JUMP_VELOCITY = 5.5
+
+var username: String = "Player":
+	set = _set_username
 
 func _enter_tree() -> void:
 	set_multiplayer_authority(str(name).to_int())
@@ -35,7 +40,11 @@ func _ready() -> void:
 
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
-	position = spawns[randi() % spawns.size()]
+	position = get_furthest_spawn()
+
+	# Set username from Global
+	username = Global.username
+	update_username.rpc(username)
 
 func _process(_delta: float) -> void:
 	sensitivity = Global.sensitivity
@@ -47,21 +56,35 @@ func _process(_delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
-
+	
 	axis_vector = Input.get_vector("look_left", "look_right", "look_up", "look_down")
-
+	
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * sensitivity)
 		camera.rotate_x(-event.relative.y * sensitivity)
 	camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
-
+	
 	if Input.is_action_just_pressed("shoot") \
-			and anim_player.current_animation != "shoot" :
+			and anim_player.current_animation != "shoot":
 		play_shoot_effects.rpc()
 		gunshot_sound.play()
-		if raycast.is_colliding() && str(raycast.get_collider()).contains("CharacterBody3D") :
-			var hit_player: Object = raycast.get_collider()
-			hit_player.recieve_damage.rpc_id(hit_player.get_multiplayer_authority())
+		
+		# More reliable hit detection
+		var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state
+		var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
+			camera.global_position,
+			camera.global_position - camera.global_transform.basis.z * 50,
+			2  # Collision mask
+		)
+		var result: Dictionary = space_state.intersect_ray(query)
+			
+		if result and result.collider.is_class("CharacterBody3D"):
+			var hit_player: CharacterBody3D = result.collider
+			hit_player.recieve_damage.rpc_id(
+				hit_player.get_multiplayer_authority(),
+				1,
+				multiplayer.get_unique_id()
+			)
 
 	if Input.is_action_just_pressed("respawn"):
 		recieve_damage(2)
@@ -113,13 +136,52 @@ func play_shoot_effects() -> void:
 	muzzle_flash.emitting = true
 
 @rpc("any_peer")
-func recieve_damage(damage:= 1) -> void:
+func recieve_damage(damage:= 1, killer_id: int = 0) -> void:
 	health -= damage
 	if health <= 0:
+		if killer_id != 0:
+			var killer_name: CharacterBody3D = get_node("/root/World").get_node_or_null(str(killer_id))
+			if killer_name and killfeed:
+				killfeed.add_kill.rpc(killer_name.username, username)
 		health = 2
-		print(spawns.size())
-		position = spawns[randi() % spawns.size()]
+		position = get_furthest_spawn()
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "shoot":
 		anim_player.play("idle")
+
+@rpc("call_local")
+func update_username(new_username: String) -> void:
+	username = new_username
+	username_label.text = username
+
+@rpc("any_peer")
+func _set_username(new_username: String) -> void:
+	username = new_username
+	if username_label:
+		username_label.text = username
+
+func get_furthest_spawn() -> Vector3:
+	var world: Node = get_node("/root/World")
+	var players: Array[CharacterBody3D] = []
+	for child in world.get_children():
+		if child is CharacterBody3D and child != self:
+			players.append(child)
+	
+	if players.is_empty():
+		return spawns[randi() % spawns.size()]
+	
+	var best_spawn: Vector3 = spawns[0]
+	var max_min_distance: float = 0.0
+	
+	for spawn in spawns:
+		var min_distance: float = INF
+		for player in players:
+			var dist: float = spawn.distance_to(player.position)
+			min_distance = min(min_distance, dist)
+		
+		if min_distance > max_min_distance:
+			max_min_distance = min_distance
+			best_spawn = spawn
+	
+	return best_spawn

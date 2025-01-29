@@ -157,6 +157,12 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("Camera3D:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath(".:username")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("Username:text")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [node name="player" type="CharacterBody3D"]
 collision_layer = 2
@@ -192,6 +198,7 @@ process_material = SubResource("ParticleProcessMaterial_h4yve")
 draw_pass_1 = SubResource("PlaneMesh_fbvoh")
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.288967, -0.147217, -0.0239767)
 target_position = Vector3(0, 0, -50)
 collision_mask = 3
 
@@ -215,6 +222,13 @@ scale = Vector2(0.03, 0.03)
 texture = ExtResource("4_ssmal")
 stretch_mode = 5
 script = ExtResource("5_fnci2")
+
+[node name="Username" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 1
+text = "Player"
+font_size = 24
+outline_size = 4
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="child_order_changed" from="MeshInstance3D" to="." method="_on_mesh_instance_3d_child_order_changed"]
