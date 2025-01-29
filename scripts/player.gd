@@ -7,6 +7,7 @@ extends CharacterBody3D
 @onready var gunshot_sound: AudioStreamPlayer3D = %GunshotSound
 @onready var username_label: Label3D = $Username
 @onready var killfeed: VBoxContainer = get_node("/root/World/UI/Killfeed")
+@onready var hitmarker = preload("res://scenes/ui/hitmarker.tscn").instantiate()
 
 ## Number of shots before a player dies
 @export var health : int = 2
@@ -46,6 +47,11 @@ func _ready() -> void:
 	username = Global.username
 	update_username.rpc(username)
 
+	# Add hitmarker to UI
+	add_child(hitmarker)
+	hitmarker.set_as_top_level(true)
+	hitmarker.position = get_viewport().size / 2
+
 func _process(_delta: float) -> void:
 	sensitivity = Global.sensitivity
 	controller_sensitivity = Global.controller_sensitivity
@@ -80,11 +86,19 @@ func _unhandled_input(event: InputEvent) -> void:
 			
 		if result and result.collider.is_class("CharacterBody3D"):
 			var hit_player: CharacterBody3D = result.collider
+			var is_headshot = false
+			
+			# Check if we hit the head collision shape
+			if result.shape.get_parent().name == "Head":
+				is_headshot = true
+			
 			hit_player.recieve_damage.rpc_id(
 				hit_player.get_multiplayer_authority(),
-				1,
-				multiplayer.get_unique_id()
+				2 if is_headshot else 1,  # Double damage for headshots
+				multiplayer.get_unique_id(),
+				is_headshot
 			)
+			hitmarker.play_hitmarker(is_headshot)
 
 	if Input.is_action_just_pressed("respawn"):
 		recieve_damage(2)
@@ -136,13 +150,14 @@ func play_shoot_effects() -> void:
 	muzzle_flash.emitting = true
 
 @rpc("any_peer")
-func recieve_damage(damage:= 1, killer_id: int = 0) -> void:
+func recieve_damage(damage:= 1, killer_id: int = 0, is_headshot: bool = false) -> void:
 	health -= damage
 	if health <= 0:
 		if killer_id != 0:
-			var killer_name: CharacterBody3D = get_node("/root/World").get_node_or_null(str(killer_id))
+			var killer_name = get_node("/root/World").get_node_or_null(str(killer_id))
 			if killer_name and killfeed:
-				killfeed.add_kill.rpc(killer_name.username, username)
+				killfeed.add_kill.rpc(killer_name.username, username, is_headshot)
+				get_node("/root/World/UI/Scoreboard").update_score.rpc(killer_id, is_headshot)
 		health = 2
 		position = get_furthest_spawn()
 

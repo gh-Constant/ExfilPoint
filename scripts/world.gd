@@ -67,6 +67,7 @@ func _on_host_button_pressed() -> void:
 	$Menu/Blur.hide()
 	menu_music.stop()
 
+	# Set up networking first
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(add_player)
@@ -75,9 +76,28 @@ func _on_host_button_pressed() -> void:
 	if options_menu.visible:
 		options_menu.hide()
 
-	add_player(multiplayer.get_unique_id())
+	# Create host player immediately without going through add_player
+	var player = Player.instantiate()
+	player.name = str(multiplayer.get_unique_id())
+	add_child(player)
 
-	upnp_setup()
+	# Set up UPNP in the background
+	_setup_upnp.call_deferred()
+
+func _setup_upnp() -> void:
+	var upnp: UPNP = UPNP.new()
+	
+	var discover_result = upnp.discover()
+	if discover_result == UPNP.UPNP_RESULT_SUCCESS:
+		upnp.add_port_mapping(PORT)
+		
+		var ip: String = upnp.query_external_address()
+		if ip == "":
+			print("Failed to establish upnp connection!")
+		else:
+			print("Success! Join Address: %s" % ip)
+	else:
+		print("UPNP Discovery failed!")
 
 func _on_join_button_pressed() -> void:
 	main_menu.hide()
@@ -110,15 +130,3 @@ func remove_player(peer_id: int) -> void:
 	var player: Node = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
-
-func upnp_setup() -> void:
-	var upnp: UPNP = UPNP.new()
-
-	upnp.discover()
-	upnp.add_port_mapping(PORT)
-
-	var ip: String = upnp.query_external_address()
-	if ip == "":
-		print("Failed to establish upnp connection!")
-	else:
-		print("Success! Join Address: %s" % upnp.query_external_address())
