@@ -126,7 +126,7 @@ properties/3/path = NodePath(".:username")
 properties/3/spawn = true
 properties/3/replication_mode = 1
 
-[node name="player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_8tdgl")
 
@@ -179,6 +179,7 @@ playback_default_blend_time = 0.05
 replication_config = SubResource("SceneReplicationConfig_m36li")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+top_level = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -8,6 +8,7 @@ extends CharacterBody3D
 @onready var username_label: Label3D = $Username
 @onready var killfeed: VBoxContainer = get_node("/root/World/UI/Killfeed")
 @onready var hitmarker = preload("res://scenes/ui/hitmarker.tscn").instantiate()
+@onready var ammo_label: Label = get_node("/root/World/UI/AmmoDisplay/AmmoLabel")
 
 ## Number of shots before a player dies
 @export var health : int = 2
@@ -27,11 +28,17 @@ var controller_sensitivity : float =  .010
 var axis_vector : Vector2
 var	mouse_captured : bool = true
 
-const SPEED = 6.5
+const WALK_SPEED = 4.0
+const SPRINT_SPEED = 6.5
 const JUMP_VELOCITY = 5.5
 
 var username: String = "Player":
 	set = _set_username
+
+var current_speed: float = WALK_SPEED
+var max_ammo: int = 12
+var current_ammo: int = 12
+var is_reloading: bool = false
 
 func _enter_tree() -> void:
 	set_multiplayer_authority(str(name).to_int())
@@ -51,6 +58,7 @@ func _ready() -> void:
 	add_child(hitmarker)
 	hitmarker.set_as_top_level(true)
 	hitmarker.position = get_viewport().size / 2
+	update_ammo_display()
 
 func _process(_delta: float) -> void:
 	sensitivity = Global.sensitivity
@@ -70,8 +78,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera.rotate_x(-event.relative.y * sensitivity)
 	camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
-	if Input.is_action_just_pressed("shoot") \
-			and anim_player.current_animation != "shoot":
+	if Input.is_action_just_pressed("shoot") and !is_reloading \
+			and anim_player.current_animation != "shoot" \
+			and current_ammo > 0:
+		current_ammo -= 1
+		update_ammo_display()
 		play_shoot_effects.rpc()
 		gunshot_sound.play()
 		
@@ -101,6 +112,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			)
 			hitmarker.play_hitmarker(is_headshot)
 
+	if Input.is_action_just_pressed("reload") and !is_reloading and current_ammo < max_ammo:
+		start_reload()
+
 	if Input.is_action_just_pressed("respawn"):
 		recieve_damage(2)
 
@@ -123,16 +137,22 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
+	# Handle sprint
+	if Input.is_action_pressed("sprint") and is_on_floor():
+		current_speed = SPRINT_SPEED
+	else:
+		current_speed = WALK_SPEED
+
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("left", "right", "up", "down")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y))
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
 
 	if anim_player.current_animation == "shoot":
 		pass
@@ -201,3 +221,14 @@ func get_furthest_spawn() -> Vector3:
 			best_spawn = spawn
 	
 	return best_spawn
+
+func start_reload() -> void:
+	is_reloading = true
+	# Play reload sound
+	await get_tree().create_timer(1.5).timeout  # Adjust reload time as needed
+	current_ammo = max_ammo
+	is_reloading = false
+	update_ammo_display()
+
+func update_ammo_display() -> void:
+	ammo_label.text = str(current_ammo) + " / " + str(max_ammo)
