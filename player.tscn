@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b2qhxdrnviyqf"]
+[gd_scene load_steps=21 format=3 uid="uid://b2qhxdrnviyqf"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_8tdgl"]
 [ext_resource type="PackedScene" uid="uid://dtasdfwp6dgoh" path="res://imports/pistol.blend" id="2_0s6en"]
@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://bevvvtb8n4qfc" path="res://audio/645317__darkshroom__m9_noisegate-1780.ogg" id="3_pilvn"]
 [ext_resource type="Texture2D" uid="uid://duu4nryr7idps" path="res://textures/kenney_particle_pack/circle_05.png" id="4_ssmal"]
 [ext_resource type="Script" path="res://scripts/ui/crosshair.gd" id="5_fnci2"]
+[ext_resource type="PackedScene" uid="uid://dnmeowuvwiip" path="res://imports/AssaultRifle_1.blend" id="5_od316"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_7800j"]
 
@@ -145,15 +146,15 @@ shape = SubResource("SphereShape3D_head")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 
-[node name="pistol" parent="Camera3D" instance=ExtResource("2_0s6en")]
+[node name="WeaponHolder" type="Node3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.25, -0.5)
 
-[node name="GunshotSound" type="AudioStreamPlayer3D" parent="Camera3D/pistol"]
+[node name="GunshotSound" type="AudioStreamPlayer3D" parent="Camera3D/WeaponHolder"]
 unique_name_in_owner = true
 stream = ExtResource("3_pilvn")
 bus = &"SFX"
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="Camera3D/pistol"]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Camera3D/WeaponHolder"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00020802, 0.0394075, -0.282182)
 emitting = false
 amount = 1
@@ -163,10 +164,18 @@ local_coords = true
 process_material = SubResource("ParticleProcessMaterial_h4yve")
 draw_pass_1 = SubResource("PlaneMesh_fbvoh")
 
+[node name="pistol" parent="Camera3D" instance=ExtResource("2_0s6en")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.25, -0.5)
+visible = false
+
 [node name="RayCast3D" type="RayCast3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.288967, -0.147217, -0.0239767)
 target_position = Vector3(0, 0, -50)
 collision_mask = 3
+
+[node name="rifle" parent="Camera3D" instance=ExtResource("5_od316")]
+transform = Transform3D(-0.00467742, 0, 0.449112, 0, 0.295855, 0, -0.350303, 0, -0.00599677, 0.467093, -0.391037, -0.30025)
+visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

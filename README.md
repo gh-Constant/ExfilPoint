@@ -27,9 +27,9 @@ There is a fully featured main menu, pause menu and options panel. Did I also me
  - Music (with toggle) and bullet sounds (thanks to [bearlikelion](https://github.com/bearlikelion))
  - Configurable random respawns Player > Inspector > Spawns
  - QOL:
-    - added tooltips for exported variables
-    - code refactor (thanks to [bearlikelion](https://github.com/bearlikelion) and me)
-    - bug fixes
+	- added tooltips for exported variables
+	- code refactor (thanks to [bearlikelion](https://github.com/bearlikelion) and me)
+	- bug fixes
 
 ## Controls
   - C to toggle mouse capture

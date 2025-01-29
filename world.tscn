@@ -339,6 +339,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Enter username..."
 
+[node name="SoloButton" type="Button" parent="Menu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "Play offline without multiplayer"
+text = "Solo"
+
 [node name="MusicToggle" type="CheckButton" parent="Menu/MainMenu"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -414,4 +419,5 @@ layout_mode = 1
 [connection signal="pressed" from="Menu/MainMenu/MarginContainer/VBoxContainer/HBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="toggled" from="Menu/MainMenu/MarginContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_toggled"]
 [connection signal="toggled" from="Menu/MainMenu/MarginContainer/VBoxContainer/OptionsButton" to="Menu/Options/MarginContainer/VBoxContainer/Fullscreen" method="_on_options_button_toggled"]
+[connection signal="pressed" from="Menu/MainMenu/MarginContainer/VBoxContainer/SoloButton" to="." method="_on_solo_button_pressed"]
 [connection signal="toggled" from="Menu/MainMenu/MusicToggle" to="." method="_on_music_toggle_toggled"]

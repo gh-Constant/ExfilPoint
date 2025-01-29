@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://o5loree151hw"]
+
+[ext_resource type="PackedScene" uid="uid://dnmeowuvwiip" path="res://imports/AssaultRifle_1.blend" id="1_5nn0s"]
+
+[node name="AssaultRifle_12" instance=ExtResource("1_5nn0s")]
+transform = Transform3D(-0.00488678, 0, 0.448956, 0, 0.296, 0, -0.349966, 0, -0.00626904, 0, 0, 0)

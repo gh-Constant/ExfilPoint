@@ -130,3 +130,18 @@ func remove_player(peer_id: int) -> void:
 	var player: Node = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
+
+func _on_solo_button_pressed() -> void:
+	main_menu.hide()
+	$Menu/DollyCamera.hide()
+	$Menu/Blur.hide()
+	menu_music.stop()
+	
+	# Create solo player without networking
+	var player = Player.instantiate()
+	player.is_solo_mode = true  # Set the solo mode flag
+	player.name = "SoloPlayer"
+	add_child(player)
+	
+	if options_menu.visible:
+		options_menu.hide()
