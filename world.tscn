@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://b57uspbprxc8"]
+[gd_scene load_steps=26 format=3 uid="uid://b57uspbprxc8"]
 
 [ext_resource type="Script" path="res://scripts/world.gd" id="1_ho7yh"]
 [ext_resource type="PackedScene" uid="uid://bd3ai1v40ssao" path="res://map.tscn" id="3_fd0sg"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scripts/ui/menu/options/controller_sensitivity.gd" id="7_jhf7u"]
 [ext_resource type="Script" path="res://scripts/ui/menu/pause/quit.gd" id="9_ucmny"]
 [ext_resource type="Script" path="res://scripts/ui/killfeed.gd" id="killfeed_script"]
+[ext_resource type="Script" path="res://scripts/ui/menu/options/options_menu.gd" id="options_menu_script"]
 [ext_resource type="PackedScene" uid="uid://dxfpm8kyhopja" path="res://scenes/ui/scoreboard.tscn" id="scoreboard_scene"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_r06yd"]
@@ -144,6 +145,7 @@ offset_right = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_utqnk")
+script = ExtResource("options_menu_script")
 
 [node name="MarginContainer" type="MarginContainer" parent="Menu/Options"]
 layout_mode = 2
@@ -220,6 +222,34 @@ max_value = 0.1
 step = 0.001
 value = 0.01
 script = ExtResource("7_jhf7u")
+
+[node name="HSeparator" type="HSeparator" parent="Menu/Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BotSettings" type="VBoxContainer" parent="Menu/Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Menu/Options/MarginContainer/VBoxContainer/BotSettings"]
+layout_mode = 2
+text = "Bot Settings"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/Options/MarginContainer/VBoxContainer/BotSettings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Menu/Options/MarginContainer/VBoxContainer/BotSettings/HBoxContainer"]
+layout_mode = 2
+text = "Number of Bots:"
+
+[node name="BotCount" type="SpinBox" parent="Menu/Options/MarginContainer/VBoxContainer/BotSettings/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10.0
+value = 3.0
+
+[node name="HSeparator3" type="HSeparator" parent="Menu/Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
 
 [node name="Back" type="Button" parent="Menu/Options/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -410,6 +440,7 @@ layout_mode = 1
 [connection signal="toggled" from="Menu/Options/MarginContainer/VBoxContainer/Ping" to="FpsCounter" method="_on_ping_toggled"]
 [connection signal="value_changed" from="Menu/Options/MarginContainer/VBoxContainer/HBoxContainer/MouseSensitivity" to="Menu/Options/MarginContainer/VBoxContainer/HBoxContainer/MouseSensitivity" method="_on_value_changed"]
 [connection signal="value_changed" from="Menu/Options/MarginContainer/VBoxContainer/HBoxContainer2/ControllerSensitivity" to="Menu/Options/MarginContainer/VBoxContainer/HBoxContainer2/ControllerSensitivity" method="_on_value_changed"]
+[connection signal="value_changed" from="Menu/Options/MarginContainer/VBoxContainer/BotSettings/HBoxContainer/BotCount" to="Menu/Options" method="_on_bot_count_value_changed"]
 [connection signal="pressed" from="Menu/Options/MarginContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Menu/Options/MarginContainer/VBoxContainer/Back" to="Menu/PauseMenu/MarginContainer/VBoxContainer/Options" method="_on_back_pressed"]
 [connection signal="pressed" from="Menu/Options/MarginContainer/VBoxContainer/Back" to="Menu/MainMenu/MarginContainer/VBoxContainer/OptionsButton" method="_on_back_pressed"]

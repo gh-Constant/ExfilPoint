@@ -59,10 +59,6 @@ var is_shooting: bool = false
 # Add this near the top with other variables
 @export var default_weapon_index: int = 0  # Default to first weapon
 
-# Add near the top with other variables
-var debug_show_backtrack: bool = true
-var debug_show_raycasts: bool = true
-
 func _enter_tree() -> void:
 	if not is_solo_mode:
 		set_multiplayer_authority(str(name).to_int())
@@ -138,20 +134,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not is_multiplayer_authority() and not is_solo_mode:
 		return
-		
-	if debug_show_backtrack:
-		# Draw backtrack positions
-		for player in get_tree().get_nodes_in_group("players"):
-			if player != self:
-				var _s = DebugDraw3D.new_scoped_config().set_thickness(0.05)
-				DebugDraw3D.draw_sphere(player.global_position, 0.5, Color(1, 0, 0, 0.3))
-	
-	if debug_show_raycasts and current_weapon:
-		var start = camera.global_position
-		var end = start + (-camera.global_transform.basis.z * 50.0)
-		var _s = DebugDraw3D.new_scoped_config().set_thickness(0.02)
-		DebugDraw3D.draw_line(start, end, Color(0, 1, 0))
-		DebugDraw3D.draw_ray(start, -camera.global_transform.basis.z, 50.0, Color(1, 0, 0))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_solo_mode and not is_multiplayer_authority(): return

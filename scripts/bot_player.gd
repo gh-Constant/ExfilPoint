@@ -103,12 +103,12 @@ func handle_combat(delta: float) -> void:
 		var result = space_state.intersect_ray(query)
 		
 		if result and result.collider == target_player:
-			shoot()
+			bot_shoot()  # Use bot-specific shoot function
 	elif current_ammo <= 0:
 		start_reload()
 
-# Override shoot function for bots to avoid RPC issues
-func shoot() -> void:
+# Override shoot function specifically for bots
+func bot_shoot() -> void:
 	if not current_weapon:
 		return
 		
@@ -123,12 +123,46 @@ func shoot() -> void:
 	last_shot_time = current_time
 	current_ammo -= 1
 	
-	# Bots don't need to update ammo display
-	
-	# Handle shot logic directly for bots
 	if target_player:
 		var direction = (target_player.global_position - global_position).normalized()
-		process_shot(global_position, direction)
+		# Direct damage for bots without RPC
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(
+			global_position,
+			target_player.global_position,
+			2
+		)
+		var result = space_state.intersect_ray(query)
+		
+		if result and result.collider == target_player:
+			var hit_player = result.collider
+			var is_headshot = false
+			
+			var hit_height = result.position.y - hit_player.global_position.y
+			if hit_height > 1.4 and hit_height < 1.9:
+				is_headshot = true
+			
+			var damage = current_weapon.headshot_damage if is_headshot else current_weapon.damage
+			
+			# Apply damage directly
+			hit_player.health -= damage
+			if hit_player.health <= 0:
+				hit_player.health = hit_player.max_health
+				hit_player.position = hit_player.get_furthest_spawn()
+				
+				# Update killfeed if available
+				if killfeed:
+					killfeed.add_kill.rpc(username, hit_player.username, is_headshot)
+
+# Override these functions to prevent UI-related errors
+func update_health_bar() -> void:
+	pass  # Bots don't need health bars
+
+func update_ammo_display() -> void:
+	pass  # Bots don't need ammo display
+
+func play_shoot_effects() -> void:
+	pass  # Bots don't need visual effects
 
 # Override update_weapon_visibility for bots
 func update_weapon_visibility() -> void:
@@ -144,18 +178,4 @@ func _process(delta: float) -> void:
 	if not multiplayer.is_server():
 		return
 
-	# Draw debug visualizations
-	if Global.debug_bot_targets and target_player:
-		var _s = DebugDraw3D.new_scoped_config().set_thickness(0.05)
-		DebugDraw3D.draw_line(global_position, target_player.global_position, Color(1, 0, 0))
-		DebugDraw3D.draw_sphere(target_player.global_position, 0.5, Color(1, 0, 0, 0.3))
-
-	if Global.debug_bot_paths:
-		var _s = DebugDraw3D.new_scoped_config().set_thickness(0.02)
-		# Draw path to current target or next waypoint
-		if target_player:
-			DebugDraw3D.draw_ray(global_position, (target_player.global_position - global_position).normalized(), Global.debug_bot_view_distance, Color(0, 1, 0))
-		
-		# Draw view cone
-		var forward = -global_transform.basis.z
-		DebugDraw3D.draw_ray(global_position, forward, Global.debug_bot_view_distance, Color(0, 0, 1)) 
+# Remove all debug visualization code 
