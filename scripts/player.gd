@@ -423,7 +423,7 @@ func request_shoot(timestamp: float, shot_origin: Vector3, shot_rotation: Vector
 	var query = PhysicsRayQueryParameters3D.create(
 		shot_origin,
 		shot_origin + shot_direction * 50,
-		2  # Collision mask
+		0xFFFFFFFF  # Use all collision layers
 	)
 	var result = space_state.intersect_ray(query)
 	
@@ -488,9 +488,13 @@ func process_shot(shot_origin: Vector3, shot_direction: Vector3) -> void:
 	var query = PhysicsRayQueryParameters3D.create(
 		shot_origin,
 		shot_origin + shot_direction * 50,
-		2  # Collision mask
+		0xFFFFFFFF  # Use all collision layers
 	)
 	var result = space_state.intersect_ray(query)
+	
+	print("Shot fired. Hit something: ", result != null)
+	if result:
+		print("Hit object type: ", result.collider.get_class())
 	
 	if result and result.collider.is_class("CharacterBody3D"):
 		var hit_player = result.collider
