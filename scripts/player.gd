@@ -492,10 +492,6 @@ func process_shot(shot_origin: Vector3, shot_direction: Vector3) -> void:
 	)
 	var result = space_state.intersect_ray(query)
 	
-	print("Shot fired. Hit something: ", result != null)
-	if result:
-		print("Hit object type: ", result.collider.get_class())
-	
 	if result and result.collider.is_class("CharacterBody3D"):
 		var hit_player = result.collider
 		var is_headshot = false
