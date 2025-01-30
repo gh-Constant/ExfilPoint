@@ -14,6 +14,18 @@ var paused: bool = false
 var options: bool = false
 var controller: bool = false
 
+const BotPlayer = preload("res://scripts/bot_player.gd")
+@export var max_bots: int = 3
+var current_bots: int = 0
+
+class PlayerState:
+	var position: Vector3
+	var rotation: Vector3
+	var timestamp: float
+
+var player_state_history = {}
+const HISTORY_LENGTH = 1.0  # Store 1 second of history
+
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_pressed("pause") and !main_menu.visible and !options_menu.visible:
 		paused = !paused
@@ -56,6 +68,8 @@ func _on_back_pressed() -> void:
 func _ready() -> void:
 	username_input.text = Global.username
 	username_input.text_changed.connect(_on_username_changed)
+	
+	# Remove the old bot control code and let the options menu handle it
 
 func _on_username_changed(new_text: String) -> void:
 	Global.username = new_text if new_text.length() > 0 else "Player"
@@ -83,6 +97,10 @@ func _on_host_button_pressed() -> void:
 
 	# Set up UPNP in the background
 	_setup_upnp.call_deferred()
+
+	# Add initial bots
+	for i in range(max_bots):
+		add_bot()
 
 func _setup_upnp() -> void:
 	var upnp: UPNP = UPNP.new()
@@ -125,11 +143,25 @@ func add_player(peer_id: int) -> void:
 	var player: Node = Player.instantiate()
 	player.name = str(peer_id)
 	add_child(player)
+	
+	# Adjust bot count when real player joins
+	if multiplayer.is_server():
+		var player_count = get_tree().get_nodes_in_group("players").size() - current_bots
+		var desired_bots = max(0, max_bots - player_count)
+		while current_bots > desired_bots:
+			remove_bot()
 
 func remove_player(peer_id: int) -> void:
 	var player: Node = get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
+		
+	# Add bot when real player leaves
+	if multiplayer.is_server():
+		var player_count = get_tree().get_nodes_in_group("players").size() - current_bots
+		var desired_bots = max(0, max_bots - player_count)
+		while current_bots < desired_bots:
+			add_bot()
 
 func _on_solo_button_pressed() -> void:
 	main_menu.hide()
@@ -145,3 +177,45 @@ func _on_solo_button_pressed() -> void:
 	
 	if options_menu.visible:
 		options_menu.hide()
+
+func _physics_process(_delta: float) -> void:
+	var current_time = Time.get_ticks_msec() / 1000.0
+	
+	# Store states for all players
+	for player in get_tree().get_nodes_in_group("players"):
+		if not player_state_history.has(player.name):
+			player_state_history[player.name] = []
+			
+		var state = PlayerState.new()
+		state.position = player.global_position
+		state.rotation = player.global_rotation
+		state.timestamp = current_time
+		
+		player_state_history[player.name].append(state)
+		
+		# Cleanup old states
+		while player_state_history[player.name].size() > 0:
+			var oldest = player_state_history[player.name][0]
+			if current_time - oldest.timestamp > HISTORY_LENGTH:
+				player_state_history[player.name].pop_front()
+			else:
+				break
+
+func add_bot() -> void:
+	if not multiplayer.is_server():
+		return
+		
+	var bot = Player.instantiate()
+	bot.set_script(BotPlayer)
+	bot.name = str(multiplayer.get_unique_id() + 1000 + current_bots)  # Use high IDs for bots
+	add_child(bot)
+	current_bots += 1
+
+func remove_bot() -> void:
+	if not multiplayer.is_server():
+		return
+		
+	var bots = get_tree().get_nodes_in_group("players").filter(func(p): return p.get_script() == BotPlayer)
+	if bots.size() > 0:
+		bots[0].queue_free()
+		current_bots -= 1

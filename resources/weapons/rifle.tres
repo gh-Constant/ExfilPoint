@@ -7,7 +7,8 @@
 [resource]
 script = ExtResource("1_resource")
 name = "Rifle"
-damage = 1
+damage = 5
+headshot_damage = 10
 max_ammo = 30
 fire_rate = 0.1
 reload_time = 2.0

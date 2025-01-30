@@ -1,10 +1,9 @@
-[gd_scene load_steps=15 format=4 uid="uid://bd3ai1v40ssao"]
+[gd_scene load_steps=14 format=4 uid="uid://bd3ai1v40ssao"]
 
 [ext_resource type="PackedScene" uid="uid://7ddh125nbnc" path="res://imports/map.blend" id="1_kq4wn"]
 [ext_resource type="Texture2D" uid="uid://b2y4kxxsaf48q" path="res://textures/kenney_prototype_textures/dark/texture_09.png" id="2_ak1oh"]
 [ext_resource type="Texture2D" uid="uid://bpoy7c7ksg0yb" path="res://textures/kenney_prototype_textures/orange/texture_09.png" id="3_t2c11"]
 [ext_resource type="Texture2D" uid="uid://bdvkk3k16jm2m" path="res://textures/kenney_prototype_textures/orange/texture_07.png" id="4_vkb61"]
-[ext_resource type="PackedScene" uid="uid://b2qhxdrnviyqf" path="res://player.tscn" id="5_dvvgk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hul6f"]
 albedo_texture = ExtResource("2_ak1oh")
@@ -253,6 +252,3 @@ surface_material_override/0 = SubResource("StandardMaterial3D_uceiw")
 
 [node name="barrel_034" parent="." index="57"]
 surface_material_override/0 = SubResource("StandardMaterial3D_uceiw")
-
-[node name="player" parent="." index="58" instance=ExtResource("5_dvvgk")]
-transform = Transform3D(1, -5.28781e-06, 6.71218e-07, 5.28779e-06, 1, 1.66194e-05, -6.71394e-07, -1.66194e-05, 1, -12.1257, 1.45519e-11, 11.7172)

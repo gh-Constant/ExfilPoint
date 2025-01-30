@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://oibrtkdukt0f"]
+
+[sub_resource type="Theme" id="Theme_l0ymi"]
+
+[node name="HealthBar" type="ProgressBar"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 398.0
+offset_bottom = 63.0
+theme = SubResource("Theme_l0ymi")
+theme_override_colors/font_color = Color(0.989538, 0.106969, 0.0722407, 1)
+theme_override_font_sizes/font_size = 16
+value = 100.0

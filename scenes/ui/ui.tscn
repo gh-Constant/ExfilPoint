@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1la5feye2lb2"]
+
+[ext_resource type="PackedScene" uid="uid://oibrtkdukt0f" path="res://scenes/ui/health_bar.tscn" id="1_healthbar"]
+
+[node name="UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HealthBar" parent="." instance=ExtResource("1_healthbar")]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 378.0
+offset_bottom = 43.0

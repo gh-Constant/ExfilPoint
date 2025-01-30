@@ -7,9 +7,10 @@
 [resource]
 script = ExtResource("1_resource")
 name = "Pistol"
-damage = 1
+damage = 25
+headshot_damage = 50
 max_ammo = 12
-fire_rate = 0.5
+fire_rate = 0.2
 reload_time = 1.5
 model_scene = ExtResource("2_model")
 muzzle_flash_position = Vector3(0.00020802, 0.0394075, -0.282182)

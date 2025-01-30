@@ -14,7 +14,7 @@
 [ext_resource type="Script" path="res://scripts/ui/menu/options/controller_sensitivity.gd" id="7_jhf7u"]
 [ext_resource type="Script" path="res://scripts/ui/menu/pause/quit.gd" id="9_ucmny"]
 [ext_resource type="Script" path="res://scripts/ui/killfeed.gd" id="killfeed_script"]
-[ext_resource type="PackedScene" path="res://scenes/ui/scoreboard.tscn" id="scoreboard_scene"]
+[ext_resource type="PackedScene" uid="uid://dxfpm8kyhopja" path="res://scenes/ui/scoreboard.tscn" id="scoreboard_scene"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_r06yd"]
 energy_multiplier = 1.25

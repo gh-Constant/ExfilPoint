@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dxfpm8kyhopja"]
 
 [ext_resource type="Script" path="res://scripts/ui/scoreboard.gd" id="1_score"]
 
@@ -69,4 +69,4 @@ theme_override_constants/margin_right = 20
 
 [node name="Scores" type="VBoxContainer" parent="Panel/VBoxContainer/ScoresContainer"]
 layout_mode = 2
-theme_override_constants/separation = 12 
+theme_override_constants/separation = 12
