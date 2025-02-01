@@ -1,23 +1,58 @@
-# Godot 4+ specific ignores
-.godot/
-/android/
-=======
+# Unity generated
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
 
-# Godot-specific ignores
-.import/
-/exports
-export.cfg
-export_presets.cfg
-/addons
+# Never ignore Asset meta data
+![Aa]ssets/**/*.meta
+
+# Visual Studio / VS Code generated
+.vs/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
 *.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
 
-# Imported translations (automatically generated from CSV files)
-*.translation
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
 
-# Mono-specific ignores
-.mono/
-data_*/
-mono_crash.*.json
+# Unity3D generated file on crash reports
+sysinfo.txt
 
-#extra
-/.vscode
+# Builds
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Crashlytics generated file
+crashlytics-build.properties
+
+# OS generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Optional: Package manager files
+/[Pp]ackages/packages-lock.json 
