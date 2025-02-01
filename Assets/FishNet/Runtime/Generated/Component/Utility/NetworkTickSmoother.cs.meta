@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6dcb9fd44a7969d4f9cfbc130479b3ed
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'FishNet: Networking Evolved'
+  packageVersion: 4.5.8R
+  assetPath: Assets/FishNet/Runtime/Generated/Component/Utility/NetworkTickSmoother.cs
+  uploadId: 726025

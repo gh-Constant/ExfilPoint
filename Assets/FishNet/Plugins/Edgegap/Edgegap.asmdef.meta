@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 58ff3a2ca929d114eaf0ca373ff1e07a
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'FishNet: Networking Evolved'
+  packageVersion: 4.5.8R
+  assetPath: Assets/FishNet/Plugins/Edgegap/Edgegap.asmdef
+  uploadId: 726025

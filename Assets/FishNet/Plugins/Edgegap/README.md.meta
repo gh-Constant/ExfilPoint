@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a22cebde73b10534b99d20367fda7b1f
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'FishNet: Networking Evolved'
+  packageVersion: 4.5.8R
+  assetPath: Assets/FishNet/Plugins/Edgegap/README.md
+  uploadId: 726025

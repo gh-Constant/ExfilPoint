@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e3f5a876d3822ce4e884e3c8d026fbcc
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'FishNet: Networking Evolved'
+  packageVersion: 4.5.8R
+  assetPath: Assets/FishNet/Plugins/Edgegap/CHANGELOG.md
+  uploadId: 726025

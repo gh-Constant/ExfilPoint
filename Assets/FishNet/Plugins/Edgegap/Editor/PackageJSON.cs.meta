@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e8abfa078881a944a81ac3bcc8e5e0f4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'FishNet: Networking Evolved'
+  packageVersion: 4.5.8R
+  assetPath: Assets/FishNet/Plugins/Edgegap/Editor/PackageJSON.cs
+  uploadId: 726025

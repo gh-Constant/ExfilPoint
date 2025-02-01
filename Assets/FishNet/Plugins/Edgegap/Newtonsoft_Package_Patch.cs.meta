@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 67c7109c88dff6c4f86ecc84782205d9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'FishNet: Networking Evolved'
+  packageVersion: 4.5.8R
+  assetPath: Assets/FishNet/Plugins/Edgegap/Newtonsoft_Package_Patch.cs
+  uploadId: 726025

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7b18949555c60224384ab80e57e1fd68
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'FishNet: Networking Evolved'
+  packageVersion: 4.5.8R
+  assetPath: Assets/FishNet/Plugins/Edgegap/Editor/Fonts/Spartan-SemiBold SDF.asset
+  uploadId: 726025

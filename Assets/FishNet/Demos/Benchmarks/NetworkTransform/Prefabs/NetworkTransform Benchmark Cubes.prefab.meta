@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 031d1c17151c61e4895947168981c53a
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'FishNet: Networking Evolved'
+  packageVersion: 4.5.8R
+  assetPath: Assets/FishNet/Demos/Benchmarks/NetworkTransform/Prefabs/NetworkTransform
+    Benchmark Cubes.prefab
+  uploadId: 726025

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e09d1a72e7fd54d40b0bf435bb46c29f
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'FishNet: Networking Evolved'
+  packageVersion: 4.5.8R
+  assetPath: Assets/FishNet/Plugins/Edgegap/LICENSE.md
+  uploadId: 726025
